@@ -6,7 +6,7 @@ data=[]
 for _ in range(k):
     data.append(int(input()))
 
-start=0
+start=1
 end=max(data)
 ans=0
 while start<=end:
