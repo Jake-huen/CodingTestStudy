@@ -4,7 +4,7 @@ data = []
 for i in range(n):
     age, name = list(input().split())
     age=int(age)
-    data.append((age, name, i))
+    data.append((age, name))
 data = sorted(data, key=lambda x: x[0])
 
 for i in range(n):
