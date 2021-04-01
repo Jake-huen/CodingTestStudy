@@ -9,5 +9,12 @@ def hanoi(move,start,end):
     hanoi(move-1,start,other)
     move_check(start,end)
     hanoi(move-1,other,end)
+sum=0
+for i in range(n):
+    sum=sum*2+1
 
-hanoi(n,1,3)
+if n>20:
+    print(sum)
+else:
+    print(sum)
+    hanoi(n,1,3)
