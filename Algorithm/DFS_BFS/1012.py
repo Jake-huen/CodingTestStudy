@@ -30,6 +30,7 @@ for _ in range(t):
         graph[y][x]=1
     for i in range(n):
         for j in range(m):
-            if dfs(i,j):
+            if graph[i][j]:
+                dfs(i,j)
                 result+=1
     print(result)

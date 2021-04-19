@@ -14,5 +14,4 @@ def bfs(n):
             if 0<=next<100001 and not d[next]:
                 d[next]=d[v]+1
                 queue.append(next)
-
 bfs(n)
