@@ -1,10 +1,11 @@
 #n개의 원소중 m개를 고르는 모든 조합
-#ex> n개중 4개를 고르는 경우
+#https://mildchae.tistory.com/5
+#ex> n개중 3개를 고르는 경우
 from itertools import combinations
 arr=[[0,0],[1,1],[2,5],[3,4]]
 print(list(combinations(arr,3)))
 
-#document
+#document 살펴보기
 def combinations(iterable, r):
     # combinations('ABCD', 2) --> AB AC AD BC BD CD
     # combinations(range(4), 3) --> 012 013 023 123
