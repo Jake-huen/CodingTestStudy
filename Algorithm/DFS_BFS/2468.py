@@ -12,7 +12,7 @@ for i in range(5):
     for j in range(5):
         big=max(big,graph[i][j])
         small=min(small,graph[i][j])
-
+#건물 최대는 big, 최소는 small
 def dfs(x,y,new_graph):
     dx=[-1,1,0,0]
     dy=[0,0,-1,1]
