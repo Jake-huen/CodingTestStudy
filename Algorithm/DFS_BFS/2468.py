@@ -6,10 +6,10 @@ graph=[]
 for i in range(n):
     graph.append(list(map(int,input().split())))
 big =0
-small=10001
+small=100
 #graph에서 높이 최대와 최소 확인하기
-for i in range(5):
-    for j in range(5):
+for i in range(n):
+    for j in range(n):
         big=max(big,graph[i][j])
         small=min(small,graph[i][j])
 #건물 최대는 big, 최소는 small
@@ -21,12 +21,14 @@ def dfs(x,y,new_graph):
         ny=y+dy[i]
         if nx<0 or nx>=n or ny<0 or ny>=n:
             continue
+        if new_graph[nx][ny]==1:
+            continue
         if new_graph[nx][ny]==0:
             new_graph[nx][ny]=1
             dfs(nx,ny,new_graph)
 
 answer=0
-for k in range(small,big+1):
+for k in range(small,big):
     new_graph=[[0]*n for _ in range(n)]
     result=0
     #잠기는 부분을 1로, 안 잠기는 부분을 0으로
@@ -41,5 +43,7 @@ for k in range(small,big+1):
                 dfs(i,j,new_graph)
                 result+=1
     answer = max(answer,result)
+if small == big:
+    answer=1
 
 print(answer)

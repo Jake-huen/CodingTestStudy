@@ -1,0 +1,4 @@
+cat: 고양이
+apple: 사과
+church: 교회
+temple: 절
