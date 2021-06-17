@@ -1,8 +1,8 @@
 from collections import Counter
 word = input()
 word = word.lower()
-print(len(Counter(word).most_common(1)))
-if len(Counter(word).most_common(1))==2:
+if len(word)>1 and Counter(word).most_common(2)[1][1]==Counter(word).most_common(2)[0][1]:
     print('?')
 else:
-    print(Counter(word).most_common(1)[0][0].upper())
+    temp=Counter(word).most_common()[0][0]
+    print(temp.upper())
