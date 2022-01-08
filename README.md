@@ -14,3 +14,5 @@ https://jobdong7757.tistory.com/
 + 코드에 간단하게 주석이 담겨져 있고, 알고리즘의 종류별로 저장하였습니다.
 
 + commit은 날짜를 기준으로 message를 남겼습니다.
+
++ pythonstudy는 간단한 python 문법을 익히기 위함입니다.
