@@ -1,5 +1,35 @@
-n=int(input())
-for i in range(n):
-    dir = input(list(input().split('\\')))
-    for j in range(len(dir)):
-        dir[j]
+import sys
+input = sys.stdin.readline
+
+class Node:
+    def __init__(self, key, data=None):
+        self.key = key
+        self.data = data
+        self.children = {}
+
+class Trie:
+    def __init__(self):
+        self.head = Node(None)
+
+    def insert(self, path):
+        curr_node = self.head
+        for file in path:
+            if file not in curr_node.children:
+                curr_node.children[file] = Node(file)
+            curr_node = curr_node.children[file]
+
+
+def dfs_node(node, depth):
+    print(' '*depth, node.key, sep='')
+    for child in sorted(node.children):
+        dfs_node(node.children[child], depth+1)
+
+path_list = []
+n = int(input())
+trie = Trie()
+for _ in range(n):
+    trie.insert(input().rstrip().split('\\'))
+# print(trie.head.children['WINNT'].children)
+
+for node in sorted(trie.head.children):
+    dfs_node(trie.head.children[node], 0)
