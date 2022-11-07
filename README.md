@@ -16,3 +16,6 @@ https://jobdong7757.tistory.com/
 + commit은 날짜를 기준으로 message를 남겼습니다.
 
 + pythonstudy는 간단한 python 문법을 익히기 위함입니다.
+
++ Algorani폴더는 스터디에서 진행된 문제들을 포함하였습니다.
++ 스터디는 매주 1회 진행하고 3문제를 풀고 있습니다.
