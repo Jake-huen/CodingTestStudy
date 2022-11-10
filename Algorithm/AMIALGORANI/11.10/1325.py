@@ -16,7 +16,7 @@ for i in range(1,n+1):
     q=deque()
     q.append(i)
     while q:
-        x = q.pop()
+        x = q.popleft()
         for j in graph[x]:
             if not visited[j]:
                 q.append(j)

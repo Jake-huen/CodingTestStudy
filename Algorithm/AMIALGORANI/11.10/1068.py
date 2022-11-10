@@ -14,20 +14,21 @@ for i in range(n):
 q=deque()
 q.append(erase_node)
 erased = []
+
 while q:
     x = q.pop()
     erased.append(x)
     for i in graph[x]:
         q.append(i)
-new_graph=defaultdict(list)
+new_graph=defaultdict(list) #지워버리고 보여줘야지
 
 for i in range(n):
-    if parent[i]!=-1 and parent[i] not in erased and i not in erased:
+    if parent[i] not in erased and i not in erased: #부모가 안 지워졌거나 나 자신도 안지워졌을때
         new_graph[parent[i]].append(i)
 
 cnt=0
-for i in range(n):
-    if len(new_graph[i])==0 and (parent[i]==-1 or len(new_graph[parent[i]])!=0) and i not in erased:
+for i in range(n): # 자식이 없고, 부모가 자식 가지고 있을때이고, 내가 지워지지 않았을때..
+    if len(new_graph[i])==0 and len(new_graph[parent[i]])!=0 and i not in erased:
         cnt+=1
 print(cnt)
 
