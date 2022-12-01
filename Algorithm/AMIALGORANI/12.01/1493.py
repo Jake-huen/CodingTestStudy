@@ -11,19 +11,19 @@ cube.sort(reverse=True)
 
 answer=0
 box_now=0
-for c_idx, c_cnt in cube:
-    box_now = box_now*8 #이전의 것들 채운 부피
-    c_len = 2 ** c_idx
+for c_idx, c_cnt in cube: # 인덱스, 큐브 갯수
+    box_now = box_now*8 # 이전의 것들 채운 부피
+    c_len = 2 ** c_idx # 큐브 변의 길이 -> 인덱스*2
 
     put_cube = (length//c_len)*(width//c_len)*(height//c_len)
-    put_cube = put_cube-box_now
+    put_cube = put_cube-box_now # 이미 이전에 채운 것들을 빼준다
     if put_cube>c_cnt: # 가지고있는 큐브의 개수보다 많으면
         put_cube = c_cnt
 
     answer += put_cube
     box_now += put_cube
 
-if box_now == box: #부피
+if box_now == box: #부피 == 1X1x1의 개수
     print(answer)
 else:
     print(-1)
