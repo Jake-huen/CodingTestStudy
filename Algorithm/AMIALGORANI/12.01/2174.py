@@ -1,10 +1,10 @@
 a,b = map(int,input().split())
 n,m = map(int,input().split())
-orders=[]
 robots=[]
 for i in range(n):
-    x, y, direction = list(input().split())
-    robots.append(list((int(x),int(y),direction)))
+    x, y, direction = list(input().split()) # 로봇의 위치, 방향
+    robots.append(list((int(x),int(y),direction))) # 1 1 E
+# print(robots)
 def do_order(x,y,dir,order): #x,y:현재 위치 order:명령
     # order = (1,F,7)
     if order == 'F':
@@ -39,25 +39,28 @@ def do_order(x,y,dir,order): #x,y:현재 위치 order:명령
         return x,y,dir
 
 for i in range(m):
-    robot,order,count = input().split()
-    x,y,dir = robots[int(robot)-1][0],robots[int(robot)-1][1],robots[int(robot)-1][2]
+    robot,order,count = input().split() # 1 F 7
+    robot = int(robot)-1
+    count = int(count)
+    x,y,dir = robots[robot][0],robots[robot][1],robots[robot][2] # 움직여야 되는 로봇의 x,y좌표와 방향
     for j in range(int(count)):
-        if j==0:
-            x_temp,y_temp,dir_temp = do_order(x,y,dir,order)
-        else:
-            x_temp,y_temp,dir_temp = do_order(x_temp,y_temp,dir_temp,order)
-        robots[int(robot)-1][0]=x_temp
-        robots[int(robot)-1][1]=y_temp
-        robots[int(robot)-1][2]=dir_temp
+        x,y,dir = do_order(x,y,dir,order)
+        robots[robot][0]=x
+        robots[robot][1]=y
+        robots[robot][2]=dir
         for k in range(len(robots)):
-            if x_temp == robots[k][0] and y_temp == robots[k][1]:
-                if k+1!=int(robot):
-                    print(f'Robot {robot} crashes into robot {k+1}')
+            if x == robots[k][0] and y == robots[k][1]:
+                if k!=robot:
+                    print(f'Robot {robot+1} crashes into robot {k+1}')
                     exit(0)
-        if x_temp<0 or x_temp>n or y_temp>n or y_temp<0:
-            print(f"Robot {robot} crashes into the wall")
+        if x<0 or x>n or y>n or y<0:
+            print(f"Robot {robot+1} crashes into the wall")
             exit(0)
+        print(robots)
 print("OK")
+
+
+
 
 """
 5 4
