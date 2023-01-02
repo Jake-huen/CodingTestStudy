@@ -9,10 +9,12 @@ letterlist = []
 def palindrom(letter):
     left = 0
     right = len(letter) - 1
-    while left < right:
+    while True:
         if letter[left] == letter[right]:
             left += 1
             right -= 1
+            if left >= right:
+                break
         elif letter[left] != letter[right]:  # 다른 경우
             if left < right - 1:
                 temp = letter[:right] + letter[right + 1:]
