@@ -6,7 +6,7 @@ houses = []
 for _ in range(n):
     houses.append(int(input()))
 houses.sort()
-start = 1
+start = 0 # houses[0]
 end = houses[-1]
 answer = 0
 while start <= end:
