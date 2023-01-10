@@ -1,11 +1,15 @@
 import sys
 input = sys.stdin.readline
+
 T = int(input())
 letterlist = []
 answers = []
+
 for i in range(T):
     letter = list(input())
     letterlist.append(letter[:-1])
+
+
 for letter in letterlist:
     left = 0
     right = len(letter) - 1
@@ -29,5 +33,6 @@ for letter in letterlist:
                     answer = 1
                 break
     answers.append(answer)
+
 for answer in answers:
     print(answer)
