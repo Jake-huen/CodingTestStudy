@@ -24,10 +24,10 @@ def minGraph():
 
 def happy(r, c):
     if (r % 2 == 1 and c % 2 == 1) or (r % 2 == 1 and c % 2 == 0):
-        answer = ('R' * (c - 1) + 'D' + 'L' * (c - 1) + 'D') * (r - 2) + 'R' * (c - 1)
+        answer = ('R' * (c - 1) + 'D' + 'L' * (c - 1) + 'D') * (r // 2) + 'R' * (c - 1)
         return answer
     elif r % 2 == 0 and c % 2 == 1:
-        answer = ('D' * (r - 1) + 'R' + 'U' * (r - 1) + 'R') * (c - 2) + 'D' * (r - 1)
+        answer = ('D' * (r - 1) + 'R' + 'U' * (r - 1) + 'R') * (c // 2) + 'D' * (r - 1)
         return answer
     else:
         a, b = minGraph()  # 못가는곳
@@ -46,20 +46,21 @@ def happy(r, c):
                             else:
                                 answer += 'RURD'
                     answer += 'D'
-                elif a==i+1:
-                    for j in range(0,c,2):
-                        if b==j:
-                            answer+='RD'
+                elif a == i + 1:
+                    for j in range(0, c, 2):
+                        if b == j:
+                            answer += 'RD'
                         else:
                             if not check:
-                                answer+='DRUR'
+                                answer += 'DRUR'
                             else:
-                                answer+='RDRU'
-                    answer+='D'
+                                answer += 'RDRU'
+                    answer += 'D'
                 else:
                     answer += ('R' * (c - 1) + 'D' + 'L' * (c - 1) + 'D')
             else:
                 answer += ('L' * (c - 1) + 'D' + 'R' * (c - 1) + 'D')
         return answer[:-1]
+
 
 print(happy(r, c))
