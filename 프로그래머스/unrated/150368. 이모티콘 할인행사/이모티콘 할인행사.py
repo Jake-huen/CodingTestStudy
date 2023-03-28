@@ -1,27 +1,23 @@
 from itertools import product
-def buy(discount_case, limit, emoticons):
-    total = 0
-    for idx,discount in enumerate(discount_case):
-        if discount>=limit:
-            total+= emoticons[idx]*(100-discount)//100
-    return total
+
 
 def solution(users, emoticons):
     answer = []
-    discounts = [10,20,30,40]        
-    emoticons_count = len(emoticons)
-    discount_cases = list(product(discounts,repeat = emoticons_count))
-    result = []
-    for discount_case in discount_cases:
-        emoticon_plus = 0
-        sales=0
+    discounts = [10, 20, 30, 40]
+    ways = list(product(discounts, repeat = len(emoticons)))
+    for way in ways:
+        t1 = 0
+        t2 = 0
         for user in users:
-            buy_price = buy(discount_case,user[0],emoticons)
-            if buy_price >= user[1]:
-                emoticon_plus+=1
+            sum = 0
+            for idx, emoticon in enumerate(emoticons):
+                if way[idx] >= user[0]:
+                    sum += emoticon * ((100 - way[idx]) / 100)
+            # 6300 9000 7200
+            if sum >= user[1]:
+                t1 += 1
             else:
-                sales+=buy_price
-        result.append([emoticon_plus, sales])
-    # print(sorted(result,reverse=True))
-    answer = sorted(result,reverse=True)[0]
-    return answer
+                t2 += sum
+        answer.append([t1, int(t2)])
+    answer = sorted(answer, reverse=True, key=lambda x: (x[0], x[1]))
+    return answer[0]
