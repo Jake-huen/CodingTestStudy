@@ -1,22 +1,29 @@
 def solution(cap, n, deliveries, pickups):
-    suffixSumD = [delivery for delivery in deliveries]
-    suffixSumP = [pickup for pickup in pickups]
-
-    for idx in range(n - 2, -1, -1):
-        suffixSumD[idx] = suffixSumD[idx + 1] + suffixSumD[idx]
-        suffixSumP[idx] = suffixSumP[idx + 1] + suffixSumP[idx]
-
-    sumCap = 0
-    answer = 0
-    for idx in range(n - 1, -1, -1):
-        target = max(suffixSumD[idx], suffixSumP[idx])
-        if target == 0: break
-        if target > sumCap:
-            visitFrequency = (target - sumCap) // cap + (1 if target % cap else 0)
-            answer += (idx + 1) * visitFrequency
-            sumCap += visitFrequency * cap
-
-    return answer * 2
+    dmax, pmax, ans = n - 1, n - 1, 0
+    if sum(deliveries) + sum(pickups) == 0:
+        return 0
+    while dmax > -1 or pmax > -1:
+        ans += 2 * max(pmax + 1, dmax + 1)
+        dcar, pcar = cap, cap
+        while dmax > -1 and dcar > 0:
+            if deliveries[dmax] > dcar:
+                deliveries[dmax] -= dcar
+                dcar = 0
+            else:
+                dcar -= deliveries[dmax]
+                dmax -= 1
+            while dmax > -1 and deliveries[dmax] == 0:
+                dmax -= 1
+        while pmax > -1 and pcar > 0:
+            if pickups[pmax] > pcar:
+                pickups[pmax] -= pcar
+                pcar = 0
+            else:
+                pcar -= pickups[pmax]
+                pmax -= 1
+            while pmax > -1 and pickups[pmax] == 0:
+                pmax -= 1
+    return ans
 
 
 print(solution(4, 5, [1, 0, 3, 1, 2], [0, 3, 0, 4, 0]))
