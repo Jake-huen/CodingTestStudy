@@ -1,38 +1,39 @@
-def tentotwo(number, ans):  # 십진수-> 이진수
-    if number == 0:
-        return ans
-    if number % 2 == 0:
-        return tentotwo(number // 2, "0" + ans)
-    elif number % 2 == 1:
-        return tentotwo(number // 2, "1" + ans)
-
-
-def adjustnumber(number):
-    temp = 0
-    for i in range(51):
-        temp = 2**i-1
-        if temp>=len(number):
-            break
-    return '0'*(temp-len(number))+number
-
-
-def check(number,parent):
-    if parent == '0': #만약에 루트 노드가 0이면 모든 child node는 0이어야 한다.
-        for child in number:
-            if child != '0':
-                return False
-    if len(number)==1: # 하나 밖에 없을때는 무조건 통과
-        return True
-    center = len(number)//2
-    return check(number[:center],number[center]) and check(number[center+1:],number[len(number)-center-1])
 
 
 def solution(numbers):
     answer = []
+    def tentotwo(number):
+        ans=''
+        while number!=0:
+            if number%2==0:
+                ans = '0'+ans
+                number = number//2
+            elif number%2==1:
+                ans = '1'+ans
+                number = number//2
+        return ans
+    def fillnumber(number):
+        for i in range(50):
+            temp = 2**i-1
+            if temp>=len(number):
+                return '0'*(temp-len(number))+number
+    def check(number):
+        if len(number)==1:
+            return True
+        mid = len(number)//2
+        if number[mid]=='0':
+            for i in range(len(number)):
+                if number[i]=='1':
+                    return False
+            return True
+        elif number[mid]=='1':
+            first = number[0:mid]
+            second = number[mid+1:]
+            return check(first) and check(second)
     for number in numbers:
-        temp = tentotwo(number, "")
-        temp = adjustnumber(temp)
-        if check(temp,temp[len(temp)//2]):
+        number = tentotwo(number)
+        number = fillnumber(number)
+        if check(number):
             answer.append(1)
         else:
             answer.append(0)
