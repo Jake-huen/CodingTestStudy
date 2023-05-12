@@ -1,10 +1,13 @@
 n = input()
-x = n.replace("PPAP", "P")
-if x == "P" or x == "PPAP":
+stack = []
+ppap = ["P", "P", "A", "P"]
+for i in range(len(n)):
+    stack.append(n[i])
+    if stack[-4:] == ppap:
+        for _ in range(4):
+            stack.pop()
+        stack.append('P')
+if stack == ppap or stack == ["P"]:
     print("PPAP")
 else:
-    x = x.replace("PPAP", "P")
-    if "A" in x:
-        print("NP")
-    else:
-        print("PPAP")
+    print("NP")
