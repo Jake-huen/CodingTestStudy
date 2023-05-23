@@ -59,7 +59,7 @@ for i in range(m):
             if 0 <= nx < m and 0 <= ny < n:
                 if new_graph[i][j] != new_graph[nx][ny]:
                     third = max(third, new_graph[i][j] + new_graph[nx][ny])
-if third==0:
+if third == 0:
     if first == 1:
         third = second
     elif first > 1:
