@@ -14,7 +14,6 @@ visited = [False for _ in range(n)]
 
 def bfs(start):
     q = deque()
-    members = set()
     min_node = 10000
     q.append(start)
     while q:
@@ -22,7 +21,6 @@ def bfs(start):
         if costs[x] < min_node:
             min_node = costs[x]
         visited[x] = True
-        members.add(x)
         for node in graph[x]:
             if not visited[node]:
                 q.append(node)
