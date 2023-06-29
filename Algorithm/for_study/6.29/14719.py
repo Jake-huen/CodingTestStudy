@@ -1,10 +1,11 @@
 h, w = map(int, input().split())
 graph = list(map(int, input().split()))
 ans = 0
-for i in range(1, w - 1):
-    left_max = max(graph[:i])
-    right_max = max(graph[i + 1:])
-    temp = min(left_max, right_max)
-    if graph[i] < temp:
-        ans += temp - graph[i]
-print(ans)
+stack = []
+for i in range(len(graph)):
+    while stack and graph[i] > graph[stack[-1]]:
+        top = stack.pop()
+        distance = i - stack[-1] - 1
+        waters = min(graph[i], graph[stack[-1]] - graph[top])
+        ans += distance * waters
+    stack.append(i)
