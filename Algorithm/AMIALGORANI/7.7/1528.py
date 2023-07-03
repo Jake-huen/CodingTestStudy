@@ -1,24 +1,15 @@
-n = int(input())
-if n <= 7:
-    d = [-1] * 8
-    d[4] = 1
-    d[7] = 1
-else:
-    d = [-1] * (n + 1)
-    d[4] = 1
-    d[7] = 1
-    for i in range(7, n + 1):
-        case1, case2 = 0, 0
-        if d[i - 4] >= 1:
-            case1 = d[i - 4] + 1
-        if d[i - 7] >= 1:
-            case2 = d[i - 7] + 1
-        if case1 ==0 and case2==0:
-            d[i] = -1
-        elif case1 == 0 and case2 != 0:
-            d[i] = case2
-        elif case1 != 0 and case2 == 0:
-            d[i] = case1
-        else:
-            d[i] = min(case1, case2)
-print(d[n])
+def recursion(num, A, B):
+    global answer
+    if num > 1_000_000_000:
+        return
+
+    if A <= num and num <= B:
+        answer += 1
+    recursion(10*num+4, A, B)
+    recursion(10*num+7, A, B)
+
+answer = 0
+A = int(input())
+B = int(input())
+recursion(0, A, B)
+print(answer)
