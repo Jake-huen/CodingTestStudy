@@ -10,25 +10,28 @@ left = numbers[:n // 2]
 right = numbers[n // 2:]
 
 answer = 0
-left_cases = []
-right_cases = []
-for i in range(1, n // 2 + 1):
+left_cases = {}
+right_cases = {}
+for i in range(1, len(left) + 1):
     for x in combinations(left, i):
-        tmp = sum(x)
-        left_cases.append(tmp)
-        if tmp == s:
-            answer += 1
-for i in range(1, n // 2 + 1):
+        if sum(x) in left_cases:
+            left_cases[sum(x)] += 1
+        else:
+            left_cases[sum(x)] = 1
+for i in range(1, len(right) + 1):
     for x in combinations(right, i):
-        tmp = sum(x)
-        right_cases.append(tmp)
-        if tmp == s:
-            answer += 1
-left_cases.sort()
-right_cases.sort()
+        if sum(x) in right_cases:
+            right_cases[sum(x)] += 1
+        else:
+            right_cases[sum(x)] = 1
+# print(left_cases)
+# print(right_cases)
+if s in left_cases:
+    answer += left_cases[s]
+if s in right_cases:
+    answer += right_cases[s]
 
 for left_case in left_cases:
-    for right_case in right_cases:
-        if left_case + right_case == s:
-            answer += 1
+    if s - left_case in right_cases:
+        answer += left_cases[left_case] * right_cases[s - left_case]
 print(answer)
