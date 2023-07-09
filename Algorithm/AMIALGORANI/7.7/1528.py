@@ -39,7 +39,7 @@ while q:
     for i in range(len(gms)):
         next = cur + gms[i]
         if next > n:
-            continue
+            break
         if visited[next] == -1:
             visited[next] = cur
             q.append(next)
