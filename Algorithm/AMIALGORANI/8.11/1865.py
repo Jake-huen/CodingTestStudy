@@ -6,7 +6,7 @@ tc = int(input())
 for _ in range(tc):
 
     n, m, w = map(int, input().split())
-    edges = [[] for _ in range(n+1)]
+    edges = [[] for _ in range(n + 1)]
     distance = [10001] * (n + 1)
     for _ in range(m):
         s, e, t = map(int, input().split())
@@ -27,8 +27,11 @@ for _ in range(tc):
                     cost = k[1]
                     if distance[next_node] > distance[j] + cost:
                         distance[next_node] = distance[j] + cost
-                        if i == n:
+                        if i == n:  # 마지막인데도 계속 업데이트 된다
                             return True
+                    print(i, j, k)
+                    print(distance)
+                    print()
         return False
 
 
