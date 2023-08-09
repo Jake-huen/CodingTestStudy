@@ -17,7 +17,7 @@ def bellman_ford(start):
     for repeat in range(n):
         for i in range(1, n + 1):
             for next, cost in graph[i]:
-                if distance[i] != INF and cost + distance[i] < distance[next]:  # i를 거쳐서 가는게 곧바로 next로 가는것보다 더 짧다면
+                if distance[i] != INF and cost + distance[i] < distance[next]:
                     distance[next] = cost + distance[i]
                     if repeat == n - 1:
                         return True
