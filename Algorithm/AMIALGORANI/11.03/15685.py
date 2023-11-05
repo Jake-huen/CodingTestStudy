@@ -22,7 +22,7 @@ for _ in range(n):
         ny = y + dy[i]
         graph[nx][ny] = 1
         x, y = nx, ny
-    
+
 
 ans = 0
 for i in range(100):
