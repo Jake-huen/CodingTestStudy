@@ -41,7 +41,7 @@ public class Main {
             }
         }
         len = pizza.size(); // 피자집의 개수 -> len C m
-        combi = new int[m]; //
+        combi = new int[m]; // 뽑은 m개 저장하기
         T.DFS(0, 0);
     }
 
