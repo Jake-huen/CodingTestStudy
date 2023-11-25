@@ -1,4 +1,4 @@
-# 낚ㅁㅁ
+# 낚시
 
 n, m, q = map(int, input().split())
 a = []
