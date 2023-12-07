@@ -1,3 +1,6 @@
+import copy
+from collections import deque
+
 fish = {i: [] for i in range(1, 15)}
 for row in range(4):
     temp = list(map(int, input().split()))
@@ -7,8 +10,9 @@ for row in range(4):
         fish_place = [row, i // 2]
         fish[fish_number] = [fish_dir, fish_place]
 shark = [0, 0]  # 처음 위치
+shark_dir = 0
 
-# dir 1위 2왼위 3왼 4왼아 5아 6오아 7오 8오위
+# dir 0제자리 1위 2왼위 3왼 4왼아 5아 6오아 7오 8오위
 dx = [0, -1, -1, 0, 1, 1, 1, 0, -1]
 dy = [0, 0, -1, -1, -1, 0, 1, 1, 1]
 answer = []
@@ -19,11 +23,13 @@ def shark_init():
         f_x, f_y = fish[fish_number][1]
         if f_x == shark[0] and f_y == shark[1]:
             answer.append(fish_number)
+            global shark_dir
+            shark_dir = fish[fish_number][0]
             del fish[fish_number]
 
 
-def fish_move():
-    for fish_number in range(1, 16):
+def fish_move(shark):
+    for fish_number in range(1, 17):
         if fish_number in fish:  # 물고기가 존재하는 경우
             x, y = fish[fish_number][1]  # 시작할때 물고기의 위치
             dir = fish[fish_number][0]  # 시작할때 물고기의 방향
@@ -32,38 +38,62 @@ def fish_move():
                 nx = x + dx[dir2]
                 ny = y + dy[dir2]
                 is_moved = False  # 움직임 여부(움직임 없으면 방향 바꿔주기 위함)
-                if 0 <= nx < 4 and 0 <= ny < 4 and nx != shark[0] and ny != shark[1]:
+                if 0 <= nx < 4 and 0 <= ny < 4 and not (nx == shark[0] and ny == shark[1]):
                     flag = False  # 교환 여부
-                    for fish_number2 in range(1, 16):
+                    for fish_number2 in range(1, 17):
                         if fish_number2 in fish:
-                            f_x, f_y = fish[fish_number2][1] # 교환할 물고기 위치
+                            f_x, f_y = fish[fish_number2][1]  # 교환할 물고기 위치
                             if f_x == nx and f_y == ny and fish_number != fish_number2:
-                                fish[fish_number][0] = dir2
                                 fish[fish_number][1] = [f_x, f_y]
                                 fish[fish_number2][1] = [x, y]
+                                fish[fish_number][0] = dir2
                                 flag = True
                                 is_moved = True
-                                print("[교환]물고기 번호 : ", fish_number, fish_number2)
+                                # print("[교환]물고기 번호 : ", fish_number, fish_number2)
+                                break
                     if not flag:
                         fish[fish_number][0] = dir2
                         fish[fish_number][1] = [nx, ny]
                         is_moved = True
-                        print("[빈칸]물고기 번호 : ", fish_number)
+                        # print("[빈칸]물고기 번호 : ", fish_number)
                 if is_moved:
                     break
                 if not is_moved:
-                    print("[방향 전환]물고기 번호 : ", fish_number)
-                    dir2 = (dir2 + 1)
-                    if dir2 == 9:
+                    # print("[방향 전환]물고기 번호 : ", fish_number)
+                    dir2 = (dir2 + 1) % 9
+                    if dir2 == 0:
                         dir2 = 1
                     if dir2 == dir:
-                        print("[움직일 곳 없음]물고기 번호 : ", fish_number)
+                        # print("[움직일 곳 없음]물고기 번호 : ", fish_number)
                         break  # 움직일 곳이 없음
 
 
+def shark_move(x, y, dir, answer, fish):
+    global ans
+    ans = max(ans, sum(answer))
+    print(answer)
+    shark = [x, y]
+    fish_move(shark)
+    for i in range(1, 5):
+        nx = x + dx[dir] * i
+        ny = y + dx[dir] * i
+        if 0 <= nx < 4 and 0 <= ny < 4:
+            for fish_number in range(1, 17):
+                if fish_number in fish:
+                    f_x, f_y = fish[fish_number][1]
+                    fish_dir = fish[fish_number][0]
+                    if nx == f_x and ny == f_y:  # 다음 상어 위치와 같은 위치에 있는 물고기 찾기
+                        del fish[fish_number]
+                        answer.append(fish_number)
+                        shark_move(nx, ny, fish_dir, answer, copy.deepcopy(fish))
+                        fish[fish_number] = [fish_dir, [f_x, f_y]]
+                        answer.remove(fish_number)
+
+
+ans = 0
 shark_init()
-fish_move()
-print(fish)
+shark_move(0, 0, shark_dir, answer, fish)
+print(ans)
 
 """
 한 사이클
