@@ -10,5 +10,5 @@ for _ in range(n):
     graph.append(list(map(int, input().split())))
 # print(graph)
 
-for i in range(pow(2, n * m)):
+# for i in range(pow(2, n * m)):
     
