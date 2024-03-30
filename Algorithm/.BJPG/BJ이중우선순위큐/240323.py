@@ -26,7 +26,23 @@ for _ in range(t):
             heappush(max_q, -n)
             heappush(min_q, n)
         elif op == 'D':
-            if n==1: # 최댓값을 삭제
-
-            elif n==-1: # 최솟값을 삭제
-
+            if not isEmpty(nums.items()):
+                if n==1: # 최댓값을 삭제
+                    while -max_q[0] not in nums or nums[-max_q[0]] <1:
+                        temp = -heappop(max_q)
+                        if temp in nums:
+                            del(nums[temp])
+                elif n==-1: # 최솟값을 삭제
+                    while min_q[0] not in nums or nums[min_q[0]] < 1:
+                        temp = heappop(min_q)
+                        if temp in nums:
+                            del (nums[temp])
+                    nums[min_q[0]] -= 1
+    if isEmpty(nums.items()):
+        print('EMPTY')
+    else:
+        while min_q[0] not in nums or nums[min_q[0]] < 1:
+            heappop(min_q)
+        while -max_q[0] not in nums or nums[-max_q[0]] < 1:
+            heappop(max_q)
+        print(-max_q[0], min_q[0])
