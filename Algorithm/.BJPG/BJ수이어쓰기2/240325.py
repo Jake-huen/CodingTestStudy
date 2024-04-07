@@ -1,21 +1,23 @@
 """
-1부터 N까지의 수 이어쓰면 1234567891011...
-k번째 자리 숫자가 어떤 숫자인지 구하는 프로그램
+1 X 9 = 9
+2 X 90 = 180
+3 X 900 = 2700
+k가 어느 그룹에 들어가는지 알아야함.
 """
 
 n, k = map(int, input().split())
-total_length = 0
-digit = len(str(n))
-digit_arr = []
 
-for i in range(1, digit + 1):
-    temp = int(i * (10 ** i - 10 ** (i - 1)))
-    digit_arr.append(temp)
-    if i < digit:
-        total_length += temp
+start = 0
+digit = 1
+nine = 9
 
-total_length += (n - 10 ** (digit - 1) + 1)
-if k > total_length:
+while k > nine * digit:
+    k = k - (nine * digit)
+    start = start + nine
+    nine = nine * 10
+    digit += 1
+result = (start + 1) + (k - 1) // digit
+if result > n:
     print(-1)
 else:
-    
+    print(str(result)[(k - 1) % digit])
