@@ -11,7 +11,7 @@ flowers = []
 for _ in range(n):
     temp = list(map(int, input().split()))
     flowers.append((temp[0] * 100 + temp[1], temp[2] * 100 + temp[3]))
-flowers.sort(key=lambda x: (x[0], -x[1]))
+flowers.sort(key=lambda x: (x[0], x[1]))
 print(flowers)
 start = 301
 end = 0
@@ -29,7 +29,7 @@ while flowers:
             break
     start = end
     ans += 1
-if start <= 1201:
+if start < 1201:
     print(0)
 else:
     print(ans)
