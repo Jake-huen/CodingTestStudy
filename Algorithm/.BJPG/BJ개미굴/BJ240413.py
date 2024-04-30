@@ -3,6 +3,8 @@
 """
 
 n = int(input())
+food_info = []
 for _ in range(n):
-    k = list(input())
-    node = k[1:]
+    k = list(input().split(" "))
+    food_info.append(k[1:])
+print(food_info)
