@@ -18,27 +18,18 @@ for _ in range(n):
             else:
                 dict[temp[i]] = [True, m]
         m *= 10
-sorted_dict = sorted(dict.items(), key=lambda x: x[1], reverse=True)
-assignments = {}
+sorted_dict = sorted(dict.items(), key=lambda x: x[1][1], reverse=True)
 
-non_zero_candidates = [item[0] for item in sorted_dict if not item[1][0]]
-
-current_number = 9
-
-
-for candidate in non_zero_candidates:
-    assignments[candidate] = current_number
-    current_number -= 1
-
-for char, values in sorted_dict:
-    if char not in assignments:
-        assignments[char] = current_number
-        current_number -= 1
-print(assignments)
 total = 0
-for input in inputs:
-    m = 1
-    for i in range(len(input) - 1, -1, -1):
-        total += assignments[input[i]] * m
-        m *= 10
+count = 9
+if len(sorted_dict) > 9:
+    for i in range(9, -1, -1):
+        if sorted_dict[i][1][0]:
+            temp = sorted_dict[i]
+            sorted_dict.remove(temp)
+            sorted_dict.append(temp)
+            break
+# print(sorted_dict)
+for i in range(len(sorted_dict)):
+    total += sorted_dict[i][1][1] * (9 - i)
 print(total)
