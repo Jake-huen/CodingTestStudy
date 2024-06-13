@@ -1,38 +1,62 @@
+"""
+임의의 한점에서 가장 먼 점 A를 구하고, 해당 점에서 가장 먼 점 B를 연결하는 AB가 가장 긴 길이
+
+주의 : 길이가 같은 지름이 여러개 존재할 수 있으므로, 길이가 같은 것을 다 구해서 모두 구해줘야 한다. 
+"""
+
+import sys
 from collections import deque
 
-n = int(input())
-fruit = list(map(int, input().split()))
-graph = [[] for _ in range(n)]
+n = int(sys.stdin.readline())
+fruits = list(map(int, sys.stdin.readline().split()))
+graph = {i: [] for i in range(1, n + 1)}
 for _ in range(n - 1):
-    a, b = map(int, input().split())  # 연결되어 있는 간선
-    graph[a - 1].append(b - 1)
-    graph[b - 1].append(a - 1)
+    x, y = map(int, input().split())
+    graph[x].append(y)
+    graph[y].append(x)
 
 
-def bfs(start):
-    q = deque([])
-    q.append([start, fruit[start]])
-    global visited
-    visited[start] = True
-    ans = fruit[start]
+def DFS(n):
+    distances = [-1] * (n + 1)  # n부터 각 노드까지의 열매점수
+    q = deque([[n, n]])
+    distances[n] = [fruits[n - 1], [n, n]]
+
+    maxDis = 0
+    nodeList = []
     while q:
-        x, score = q.popleft()
-        for node in graph[x]:
-            if not visited[node]:
-                tmp = score + fruit[node]
-                ans = max(ans, tmp)
-                q.append([node, tmp])
-                visited[node] = True
-    return ans
+        route = q.pop()
+        now = route[0] # 현재 열매 정도
+
+        for next in graph[now]:
+            if distances[next] == -1:
+                temp = route[:]
+                temp[0] = next
+                dis = distances[now][0] + fruits[next - 1]
+                distances[next] = [dis, temp]
+                q.append(temp)
+                if maxDis < dis:
+                    maxDis = dis
+                    nodeList = [next]
+                elif maxDis == dis:
+                    nodeList.append(next)
+    same = {}
+    for node in nodeList:
+        same[node] = [distances[node][0], min(distances[node][1])]
+    return same
 
 
-visited = [False] * n
-answer = 0
-start = 0
-for i in range(n):
-    if not visited[i]:
-        score = bfs(i)
-        if score > answer:
-            start = i
-            answer = score
-print(answer, start)
+dis = DFS(1)
+maxDis = -1
+ansNode = -1
+for node in dis:
+    finalDis = DFS(node)
+    for ans in finalDis:
+        if maxDis < finalDis[ans][0]:
+            maxDis = finalDis[ans][0]
+            ansNode = finalDis[ans][1]
+        if maxDis == finalDis[ans][0]:
+            ansNode = min(finalDis[ans][1], ansNode)
+if n == 1:
+    print(fruits[0], 1)
+else:
+    print(maxDis, ansNode)
