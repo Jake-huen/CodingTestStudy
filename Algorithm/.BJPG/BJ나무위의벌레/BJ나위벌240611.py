@@ -28,10 +28,10 @@ def DFS(n):
         now = route[0] # 현재 열매 정도
 
         for next in graph[now]:
-            if distances[next] == -1:
+            if distances[next] == -1: # 아직 방문하지 않았다면
                 temp = route[:]
                 temp[0] = next
-                dis = distances[now][0] + fruits[next - 1]
+                dis = distances[now][0] + fruits[next - 1] # 총 당도
                 distances[next] = [dis, temp]
                 q.append(temp)
                 if maxDis < dis:
