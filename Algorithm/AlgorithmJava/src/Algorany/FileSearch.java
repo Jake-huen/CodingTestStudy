@@ -58,11 +58,12 @@ public class FileSearch {
                     if (isNumO1 && isNumO2) {
                         BigInteger s1 = new BigInteger(o1.get(i));
                         BigInteger s2 = new BigInteger(o2.get(j));
-                        if (s1 == s2) {
-                            //숫자까지 같다면 0의 갯수가 작은순
+                        int comparison = s1.compareTo(s2);
+                        if (comparison == 0) {
+                            // 숫자가 같다면 0의 갯수가 작은순
                             return o1.get(i).length() - o2.get(j).length();
                         } else {
-                            return s1.compareTo(s2);
+                            return comparison;
                         }
 
 
@@ -73,8 +74,8 @@ public class FileSearch {
                         int n1 = c1 - 'a' >= 0 ? c1 - 'a' : c1 - 'A';
                         int n2 = c2 - 'a' >= 0 ? c2 - 'a' : c2 - 'A';
 
-                        boolean isUpper1 = c1 - 'a' < 0 ? true : false;
-                        boolean isUpper2 = c2 - 'a' < 0 ? true : false;
+                        boolean isUpper1 = c1 - 'a' < 0;
+                        boolean isUpper2 = c2 - 'a' < 0;
 
                         //둘다 대문자 or 둘다 소문자
                         if ((isUpper1 && isUpper2) || (!isUpper1 && !isUpper2)) {
