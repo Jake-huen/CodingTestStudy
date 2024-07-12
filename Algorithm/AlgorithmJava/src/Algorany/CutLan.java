@@ -25,7 +25,7 @@ public class CutLan {
             mid = (start + end) / 2;
             result = 0;
             for (int i = 0; i < k; i++) {
-                if (mid > 0) {
+                if (mid != 0) {
                     result += lan[i] / mid;
                 }
             }
