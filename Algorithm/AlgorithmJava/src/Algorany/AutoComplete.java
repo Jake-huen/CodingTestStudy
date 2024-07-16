@@ -1,54 +1,42 @@
 package Algorany;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AutoComplete {
 
     public int solution(String[] words) {
         int answer = 0;
-        int[][] graph = new int[words.length][words.length];
         Arrays.sort(words);
-        for (int i = 0; i < words.length; i++) {
-            for (int j = 0; j < words.length; j++) {
-                graph[i][j] = -1;
-            }
-        }
-        // 같은 글자가 하나라도 있으면 계속해서 입력해야함.
-        for (int i = 0; i < words.length; i++) {
-            String check = words[i];
-            for (int j = i + 1; j < words.length; j++) {
-                int idx = words[i].length();
-                int count = 0;
-                int k;
-                for (k = 0; k < idx; k++) {
-                    if (check.charAt(k) == words[j].charAt(k)) {
-                        count += 1;
-                    } else {
-                        break;
-                    }
-                }
-                if (k == idx) {
-                    graph[i][j] = Math.max(graph[i][j], count);
-                    graph[j][i] = Math.max(graph[j][i], count + 1);
-                } else {
-                    graph[i][j] = Math.max(graph[i][j], count + 1);
-                    graph[j][i] = Math.max(graph[j][i], count + 1);
-                }
-            }
-        }
+        int[] counts = new int[words.length];
 
-        for (int i = 0; i < words.length; i++) {
-            int temp = 0;
-            for (int j = 0; j < words.length; j++) {
-                System.out.println("i " + words[i] + " j " + words[j] + " " + graph[i][j]);
-                temp = Math.max(temp, graph[i][j]);
-                temp = Math.min(temp, words[i].length());
+        for (int i = 0; i < words.length - 1; i++) {
+            String pre = words[i];
+            String next = words[i + 1];
+            int len = Math.min(pre.length(), next.length());
+            int sameCount = getSameCount(pre, next, len);
+
+            if (sameCount == len) {
+                counts[i] = Math.max(counts[i], sameCount);
+            } else {
+                counts[i] = Math.max(counts[i], sameCount + 1);
             }
-            answer += temp;
+            counts[i + 1] = Math.max(counts[i + 1], sameCount + 1);
         }
-        System.out.println(answer);
+        for (int count : counts) {
+            answer += count;
+        }
         return answer;
+    }
+
+    static int getSameCount(String pre, String next, int len) {
+        int count = 0;
+        for (int i = 0; i < len; i++) {
+            if (pre.charAt(i) != next.charAt(i)) {
+                return count;
+            }
+            count += 1;
+        }
+        return count;
     }
 
     public static void main(String[] args) {
