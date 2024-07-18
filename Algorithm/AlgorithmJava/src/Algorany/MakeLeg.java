@@ -114,7 +114,7 @@ public class MakeLeg {
             int from = cur[0];
             int to = cur[1];
             int cost = cur[2];
-            if (find(from) != find(to)) {
+            if (find(from) != find(to)) { // 사이클이 아닌 경우
                 sum += cost;
                 union(from, to);
                 count++;
