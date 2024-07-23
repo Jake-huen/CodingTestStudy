@@ -28,11 +28,7 @@ public class FindBackBigNumber {
             } else {
                 answer[i] = stack.peek();
             }
-            for (Integer integer : stack) {
-                System.out.println(integer);
-            }
             stack.push(numbers[i]);
-            System.out.println();
         }
         return answer;
     }
