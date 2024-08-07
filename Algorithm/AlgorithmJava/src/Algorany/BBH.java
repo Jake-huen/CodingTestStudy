@@ -24,16 +24,17 @@ public class BBH {
         int start = 0;
         int end = 0;
         int total = 0;
-        while (start < n && end < n) {
-            if (total >= s && answer > end - start) {
-                answer = end - start;
-            }
-            if (total < s) {
-                total += arr[end];
-                end += 1;
-            } else {
+        while (start < n) {
+            if (total >= s) {
+                answer = Math.min(answer, end - start);
                 total -= arr[start];
                 start += 1;
+            } else {
+                if (end == n) {
+                    break;
+                }
+                total += arr[end];
+                end += 1;
             }
         }
         if (answer == Integer.MAX_VALUE) {
