@@ -47,7 +47,7 @@ public class LionAndRabbit {
         if (!isBipartite) { // 이분 그래프가 아니라면
             System.out.println("0");
         } else { // 이분 그래프인 경우
-            System.out.println(totalCount1 * totalCount2 * 2); // 경우의 수를 모두 구하려면 두 개의 개수를 곱하고 양쪽 다 있을 수 있으므로 2를 또 곱해준다. 
+            System.out.println(totalCount1 * totalCount2 * 2); // 경우의 수를 모두 구하려면 두 개의 개수를 곱하고 양쪽 다 있을 수 있으므로 2를 또 곱해준다.
         }
     }
 
