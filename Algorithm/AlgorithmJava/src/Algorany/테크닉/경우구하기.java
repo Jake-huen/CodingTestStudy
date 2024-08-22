@@ -12,6 +12,7 @@ public class 경우구하기 {
         }
         System.out.println();
     }
+
     // 분할 결과를 출력하는 메서드
     private static void printPartitions(List<Integer> partition) {
         for (int num : partition) {
