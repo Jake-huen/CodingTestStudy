@@ -9,13 +9,8 @@ public class JeonDivideTwo {
 
     public int solution(int n, int[][] wires) {
         int answer = Integer.MAX_VALUE;
-        int len = 0;
-        for (int[] wire : wires) {
-            Math.max(len, wire[0]);
-            Math.max(len, wire[1]);
-        }
         for (int i = 0; i < wires.length; i++) {
-            int[][] graph = new int[len + 1][len + 1];
+            int[][] graph = new int[n + 1][n + 1];
             for (int j = 0; j < wires.length; j++) {
                 if (i != j) { // i는 끊어버림
                     int[] wire = wires[j];
@@ -23,12 +18,12 @@ public class JeonDivideTwo {
                     graph[wire[1]][wire[0]] = 1;
                 }
             }
-            visited = new boolean[len + 1];
+            visited = new boolean[n + 1];
             int idx = 0;
             int[] ans = new int[2];
-            for (int ii = 0; ii < len + 1; ii++) {
+            for (int ii = 1; ii < n + 1; ii++) {
                 if (!visited[ii]) {
-                    ans[ii] = bfs(ii, len + 1, graph);
+                    ans[idx] = bfs(ii, n + 1, graph);
                     idx += 1;
                 }
             }
@@ -46,8 +41,8 @@ public class JeonDivideTwo {
         visited[start] = true;
         while (!q.isEmpty()) {
             int cur = q.poll();
-            for (int i = 0; i < len; i++) {
-                if (graph[cur][i] == 1) {
+            for (int i = 1; i < len; i++) {
+                if (graph[cur][i] == 1 && !visited[i]) {
                     q.add(i);
                     visited[i] = true;
                     ans += 1;
@@ -57,11 +52,41 @@ public class JeonDivideTwo {
         return ans;
     }
 
+    static class anotherSolution {
+        int N, min;
+        int[][] map;
+        int[] vst;
+        int dfs(int n){
+            vst[n] = 1;
+            int child = 1;
+            for(int i = 1; i <= N; i++) {
+                if(vst[i] == 0 && map[n][i] == 1) {
+                    vst[i] = 1;
+                    child += dfs(i);
+                }
+            }
+            min = Math.min(min, Math.abs(child - (N - child)));
+            return child;
+        }
+        public int solution(int n, int[][] wires) {
+            N = n;
+            min = n;
+            map = new int[n+1][n+1];
+            vst = new int[n+1];
+            for(int[] wire : wires) {
+                int a = wire[0], b = wire[1];
+                map[a][b] = map[b][a] = 1;
+            }
+            dfs(1);
+            return min;
+        }
+    }
+
 
     public static void main(String[] args) {
         JeonDivideTwo j = new JeonDivideTwo();
         int[][] wires = {{1, 3}, {2, 3}, {3, 4}, {4, 5}, {4, 6}, {4, 7}, {7, 8}, {7, 9}};
-        j.solution(9, wires); // 3
-        j.solution(4, new int[][]{{1, 2}, {2, 3}, {3, 4}}); // 0
+        System.out.println(j.solution(9, wires)); // 3
+        System.out.println(j.solution(4, new int[][]{{1, 2}, {2, 3}, {3, 4}})); // 0
     }
 }
