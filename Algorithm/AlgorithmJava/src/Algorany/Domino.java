@@ -5,24 +5,78 @@ import java.io.*;
 
 public class Domino {
     static int n;
-    static String[][] domino;
-    // 도미노를 N개 골라야함. 선택한 도미노를 두 개가 같은 행에서 고르고, 선택한 도미노를 같은 열에서 고르면 안된다.
-    // (1,3) (3,2) (2,4) (4,1)
-    // 모든 도미노는 그 뒷면에 숫자가 쓰여 있다. 이 게임에서 점수를 계산할 때는 자기가 고른 도미노의 뒷면에 쓰여 있는 수를 모두 곱한다. 그 다음에 만약 사이클 그룹의 개수가 짝수가 되면 그 수에 -1을 곱한다
-    // 세준이는 자기가 이 게임에서 얻을 수 있는 최대 점수와 최소 점수가 궁금해 졌다.
+    static int[][] domino;
+    static boolean[] visited;
+    static ArrayList<Integer> result;
+    static int[] answer = {Integer.MAX_VALUE, Integer.MIN_VALUE};
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine()); // 6보다 작거나 같은 자연수
-        // i행 j열에 쓰여 있는 수는 도미노 (i,j)의 뒷면에 쓰여 있는 수 -> ABCDEFGHI : -1,-2,...-9
-        domino = new String[n][n];
+        n = Integer.parseInt(br.readLine());
+        domino = new int[n][n];
+
         for (int i = 0; i < n; i++) {
-            StringTokenizer str = new StringTokenizer(br.readLine());
+            String input = br.readLine();
             for (int j = 0; j < n; j++) {
-                domino[i][j] = str.nextToken();
+                char c = input.charAt(j);
+                if (Character.isDigit(c)) {
+                    domino[i][j] = c - '0';
+                } else {
+                    domino[i][j] = -(c - 'A' + 1);
+                }
             }
         }
-        // 같은 행에서 2개를 고르기. -> N개중 2개. N-2개는 나머지 열에서 뽑아야함.
-        // DP, BFS, DFS, 우선순위 큐
+        result = new ArrayList<>();
+        visited = new boolean[n];
+        perm(0);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(answer[0]).append("\n").append(answer[1]);
+        System.out.println(sb.toString());
+    }
+
+    static void perm(int depth) {
+        if (depth == n) {
+            // 점수 계산
+            score();
+        }
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                result.add(i);
+                perm(depth + 1);
+                result.remove(result.size() - 1);
+                visited[i] = false;
+            }
+        }
+    }
+
+    static void score() {
+        // row는 0부터 n-1까지 증가하고, col 조합이 바껴나간다.
+        int score = 1;
+        int cycles = 0;
+        boolean[] cycleVisited = new boolean[n]; // 순열 조합.
+
+        for (int i = 0; i < n; i++) {
+            score = score * domino[i][result.get(i)];
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (!cycleVisited[i]) {
+                cycles += 1;
+                int cur = i;
+                while(!cycleVisited[cur]){
+                    cycleVisited[cur] = true;
+                    cur = result.get(cur);
+                }
+            }
+        }
+
+        if (cycles % 2 == 0) {
+            score *= -1;
+        }
+        answer[0] = Math.min(answer[0], score);
+        answer[1] = Math.max(answer[1], score);
 
     }
 }
