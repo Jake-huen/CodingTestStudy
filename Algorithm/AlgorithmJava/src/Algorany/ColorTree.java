@@ -1,121 +1,122 @@
 package Algorany;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
+import java.io.*;
 
 public class ColorTree {
-
+    static final int MAX_ID = 100005; // ID의 최대값
+    static final int COLOR_MAX = 5;   // 색깔의 최대값
     static int Q;
-    static ArrayList<Integer> answer;
 
     static class Node {
-        int m_id;
-        int p_id;
-        int color;
-        int cur_depth;
-        int max_depth;
-        Set<Integer> cost;
+        int id = 0;
+        int color = 0;
+        int lastUpdate = 0; // 노드가 추가된 시점 또는 색깔 변경 시점
+        int maxDepth = 0;    // 노드가 가질 수 있는 최대 깊이
+        int parentId = 0;    // 부모 노드 ID
+        List<Integer> childIds = new ArrayList<>(); // 자식 노드 ID 목록
+    }
 
-        Node(int m_id, int p_id, int color, int cur_depth, int max_depth, Set<Integer> cost) {
-            this.m_id = m_id;
-            this.p_id = p_id;
-            this.color = color;
-            this.cur_depth = cur_depth;
-            this.max_depth = max_depth;
-            this.cost = cost;
+    static Node[] nodes = new Node[MAX_ID]; // 모든 노드를 저장
+    static boolean[] isRoot = new boolean[MAX_ID]; // 루트 여부를 체크
+
+    // Node 배열 초기화
+    static {
+        for (int i = 0; i < MAX_ID; i++) {
+            nodes[i] = new Node();
         }
+    }
+
+    // 해당 노드가 자식 노드를 가질 수 있는지 확인
+    static boolean canMakeChild(Node curr, int needDepth) {
+        if (curr.id == 0) return true; // 루트인 경우
+        if (curr.maxDepth <= needDepth) return false; // 깊이 초과 시
+        return canMakeChild(nodes[curr.parentId], needDepth + 1);
+    }
+
+    // 특정 노드의 현재 색깔을 가져옴 (lazy update 방식)
+    static int[] getColor(Node curr) {
+        if (curr.id == 0) return new int[]{0, 0}; // 루트인 경우
+        int[] info = getColor(nodes[curr.parentId]);
+        if (info[1] > curr.lastUpdate) {
+            return info; // 부모 색깔이 더 최신일 경우
+        } else {
+            return new int[]{curr.color, curr.lastUpdate}; // 현재 노드의 색깔이 최신인 경우
+        }
+    }
+
+    // 트리의 점수를 계산
+    static Object[] getBeauty(Node curr, int color, int lastUpdate) {
+        if (lastUpdate < curr.lastUpdate) { // 현재 노드의 색깔이 최신인 경우 업데이트
+            lastUpdate = curr.lastUpdate;
+            color = curr.color;
+        }
+
+        int result = 0;
+        Set<Integer> uniqueColors = new HashSet<>(); // 고유한 색상들을 저장
+        uniqueColors.add(color);
+
+        // 자식 노드들 순회
+        for (int childId : curr.childIds) {
+            Node child = nodes[childId];
+            Object[] subResult = getBeauty(child, color, lastUpdate);
+            result += (Integer) subResult[0];
+            uniqueColors.addAll((Set<Integer>) subResult[1]); // 자식 노드에서 받은 고유 색상 추가
+        }
+
+        result += uniqueColors.size() * uniqueColors.size(); // 고유 색상 개수의 제곱을 더함
+        return new Object[]{result, uniqueColors};
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Q = Integer.parseInt(br.readLine());
-        ArrayList<Node> cur = new ArrayList<>();
-        for (int i = 0; i < Q; i++) {
+        HashMap<Integer, Node> cur = new LinkedHashMap<>();
+
+        // 쿼리 처리
+        for (int i = 1; i <= Q; i++) {
             String[] s = br.readLine().split(" ");
             if (s[0].equals("100")) { // 노드 추가
                 int m_id = Integer.parseInt(s[1]); // 고유 번호
-                int p_id = Integer.parseInt(s[2]); // 부모 노드 번호 -1이면
+                int p_id = Integer.parseInt(s[2]); // 부모 노드 번호, -1이면 루트 노드
                 int color = Integer.parseInt(s[3]); // 색깔
                 int max_depth = Integer.parseInt(s[4]); // 최대 깊이
-                Node node = new Node(m_id, p_id, color, 1, max_depth, new HashSet<>(color));
+
                 if (p_id == -1) {
-                    cur.add(node);
-                } else {
-                    for (Node n : cur) {
-                        if (n.m_id == p_id) {
-                            if (n.cur_depth < n.max_depth) {
-                                n.cur_depth += 1;
-                                n.cost.add(node.color);
-                                cur.add(node);
-                            }
-                            break;
-                        }
-                    }
+                    isRoot[m_id] = true; // 루트 노드 설정
                 }
-            } else if (s[0].equals("200")) { // 색깔 변경
-                // 서브 트리 내 모든 노드의 색깔 변경
-                int m_id = Integer.parseInt(s[1]); // 고유 번호
-                int color = Integer.parseInt(s[2]); // 바꿀 색깔
-                for (Node n : cur) {
-                    if (n.m_id == m_id) { // 부모 노드
-                        Queue<Node> q = new LinkedList<>();
-                        q.add(n);
-                        n.color = color;
-                        n.cost = new HashSet<>(color);
-                        while (!q.isEmpty()) {
-                            Node now = q.poll();
-                            for (int idx = 0; idx < cur.size(); idx++) {
-                                if (cur.get(idx).p_id == now.m_id) {
-                                    q.add(cur.get(idx));
-                                    cur.get(idx).color = color;
-                                    cur.get(idx).cost = new HashSet<>(color);
-                                }
-                            }
-                        }
+
+                // 자식 노드를 추가할 수 있는지 확인
+                if (isRoot[m_id] || canMakeChild(nodes[p_id], 1)) {
+                    nodes[m_id].id = m_id;
+                    nodes[m_id].color = color;
+                    nodes[m_id].maxDepth = max_depth;
+                    nodes[m_id].parentId = isRoot[m_id] ? 0 : p_id;
+                    nodes[m_id].lastUpdate = i;
+                    if (!isRoot[m_id]) {
+                        nodes[p_id].childIds.add(m_id); // 부모에 자식 추가
                     }
                 }
 
+            } else if (s[0].equals("200")) { // 색깔 변경
+                int m_id = Integer.parseInt(s[1]); // 고유 번호
+                int color = Integer.parseInt(s[2]);
+                nodes[m_id].color = color;
+                nodes[m_id].lastUpdate = i; // 업데이트 시점 갱신
+
             } else if (s[0].equals("300")) { // 색깔 조회
                 int m_id = Integer.parseInt(s[1]); // 고유 번호
-                for (int idx = 0; idx < cur.size(); idx++) {
-                    if (cur.get(idx).m_id == m_id) {
-                        System.out.println(cur.get(idx).color);
+                System.out.println(getColor(nodes[m_id])[0]);
+
+            } else if (s[0].equals("400")) { // 색깔 조회
+                int beauty = 0;
+                for (int idx = 1; idx < MAX_ID; idx++) {
+                    if (isRoot[idx]) {
+                        beauty += (Integer) getBeauty(nodes[idx], nodes[idx].color, nodes[idx].lastUpdate)[0];
                     }
                 }
-            } else if (s[0].equals("400")) { // 점수 조회
-                int answer = 0;
-                for (int idx = 0; idx < cur.size(); idx++) {
-                    int temp = cur.get(idx).cost.size();
-                    answer += (temp * temp);
-                }
-                System.out.println(answer);
+                System.out.println(beauty);
             }
         }
     }
 }
-//15
-//100 1 -1 1 3
-//100 2 1 2 1
-//100 3 2 3 2
-//400
-//100 4 1 1 3
-//100 5 4 3 2
-//400
-//200 4 4
-//100 6 4 5 2
-//300 1
-//300 5
-//300 6
-//400
-//200 2 4
-//400
-
-//5
-//15
-//1
-//4
-//5
-//23
-//16
