@@ -33,19 +33,19 @@ public class MagicForestSearch {
                     visited[nx][ny] = true;
                     answer = Math.max(answer, nx);
                     if (graph[nx][ny] == 3) {
-                        //System.out.println("nx : " + nx + " ny : " + ny);
+                        System.out.println("nx : " + nx + " ny : " + ny);
                         for (int j = 0; j < 4; j++) {
                             int nnx = nx + dx[j];
                             int nny = ny + dy[j];
                             if (isIn(nnx, nny) && !visited[nnx][nny] && (graph[nnx][nny] == 1 || graph[nnx][nny] == 3)) {
-                                //System.out.println("nnx : " + nnx + " nny : " + nny);
+                                System.out.println("nnx : " + nnx + " nny : " + nny);
                                 for (int k = 0; k < 4; k++) {
                                     int nnnx = nnx + dx[k];
                                     int nnny = nny + dy[k];
                                     if (isIn(nnnx, nnny) && !visited[nnnx][nnny] && graph[nnnx][nnny] == 2) {
                                         visited[nnnx][nnny] = true;
                                         q.add(new int[]{nnnx, nnny});
-                                        //System.out.println("추가 : " + nnnx + " " + nnny);
+                                        System.out.println("추가 : " + nnnx + " " + nnny);
                                     }
                                 }
                             }
@@ -55,7 +55,7 @@ public class MagicForestSearch {
             }
         }
 
-        //System.out.println(answer);
+        System.out.println(answer);
         return answer;
     }
 
@@ -90,10 +90,10 @@ public class MagicForestSearch {
             }
         }
 
-        //System.out.println("최종 위치 : " + cur[0] + " " + cur[1] + " " + cur[2]);
+        System.out.println("최종 위치 : " + cur[0] + " " + cur[1] + " " + cur[2]);
 
         if (isGolamOut()) {
-            //System.out.println("바깥에 있음");
+            System.out.println("바깥에 있음");
             graph = new int[C + 1][R + 1];
             return 0;
         } else {
@@ -122,6 +122,11 @@ public class MagicForestSearch {
     public static boolean canMoveLeft(int[] cur) {
         int x = cur[0];
         int y = cur[1];
+        if (x - 1 == -1 && y - 2 > 0 && x + 2 <= C) {
+            if (graph[x][y - 2] == 0 && graph[x + 1][y - 1] == 0 && graph[x + 1][y - 2] == 0 && graph[x + 2][y - 1] == 0) {
+                return true;
+            }
+        }
         if (y - 2 > 0 && x + 2 <= C && x - 1 >= 0) {
             if (graph[x][y - 2] == 0 && graph[x + 1][y - 1] == 0 && graph[x - 1][y - 1] == 0 && graph[x + 1][y - 2] == 0 && graph[x + 2][y - 1] == 0) {
                 return true;
@@ -141,16 +146,21 @@ public class MagicForestSearch {
             newCur[0] += 1;
             newCur[1] -= 1;
             newCur[2] = (newCur[2] + 3) % 4;
-            //System.out.println("MagicForestSearch.goLeft");
-            //System.out.println(newCur[0] + " " + newCur[1]);
+            System.out.println("MagicForestSearch.goLeft");
+            System.out.println(newCur[0] + " " + newCur[1]);
         }
-        //System.out.println(newCur[0] + " " + newCur[1]);
+        System.out.println(newCur[0] + " " + newCur[1]);
         return newCur;
     }
 
     public static boolean canMoveRight(int[] cur) {
         int x = cur[0];
         int y = cur[1];
+        if (x - 1 == -1 && y + 2 <= R && x + 2 <= C && y - 1 > 0) {
+            if (graph[x][y + 2] == 0 && graph[x + 1][y + 1] == 0 && graph[x + 1][y + 2] == 0 && graph[x + 2][y + 1] == 0) {
+                return true;
+            }
+        }
         if (y + 2 <= R && x + 2 <= C && x - 1 >= 0 && y - 1 > 0) {
             if (graph[x - 1][y - 1] == 0 && graph[x][y + 2] == 0 && graph[x + 1][y + 1] == 0 && graph[x + 1][y + 2] == 0 && graph[x + 2][y + 1] == 0) {
                 return true;
@@ -165,10 +175,10 @@ public class MagicForestSearch {
             newCur[0] += 1;
             newCur[1] += 1;
             newCur[2] = (newCur[2] + 1) % 4;
-            //System.out.println("MagicForestSearch.goRight");
-            //System.out.println(newCur[0] + " " + newCur[1]);
+            System.out.println("MagicForestSearch.goRight");
+            System.out.println(newCur[0] + " " + newCur[1]);
         }
-        //System.out.println(newCur[0] + " " + newCur[1]);
+        System.out.println(newCur[0] + " " + newCur[1]);
         return newCur;
     }
 
@@ -196,13 +206,12 @@ public class MagicForestSearch {
             int dir = Integer.parseInt(str.nextToken()); // 출구 방향 정보
 
             answer += moveGolam(row, dir);
-            //System.out.println();
+            System.out.println();
             if (isGolamOut()) { // 골렘이 밖에 나가있다면
                 graph = new int[C + 1][R + 1];
             }
         }
         System.out.println(answer);
-
     }
 }
 /*
