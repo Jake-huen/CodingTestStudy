@@ -1,10 +1,19 @@
 package Algorany.KFTC;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Four {
-    public static void main(String[] args) {
-        String s = "[na][ba[ca]]";
-        long l = 3;
-        long r = 14;
+    static String s;
+    static long l;
+    static long r;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        s = br.readLine();
+        l = Long.parseLong(br.readLine());
+        r = Long.parseLong(br.readLine());
         System.out.println(extractSubstring(s, l, r));
     }
 
@@ -19,7 +28,7 @@ public class Four {
             char c = s.charAt(index);
 
             if (c == '[') {
-                int closeIndex = findClosingBracket(s, index);
+                int closeIndex = findClosingBracket(s, index); // 제일 끝에 있는 닫는 괄호 index
                 String content = s.substring(index + 1, closeIndex);
                 long contentLength = getContentLength(content);
 
